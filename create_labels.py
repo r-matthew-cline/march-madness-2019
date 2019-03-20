@@ -25,7 +25,7 @@ import os
 from tqdm import tqdm
 
 ### Read in data from csv ###
-raw_data = pd.read_csv(os.path.normpath("data/RegularSeasonDetailedResults.csv"))
+raw_data = pd.read_csv(os.path.normpath("data/stage_2/RegularSeasonDetailedResults.csv"))
 team_data = pickle.load(open(os.path.normpath("custom_data/yearly_stats_normalized.p"), "rb"))
 data = []
 labels = []
@@ -40,24 +40,31 @@ for idx, row in tqdm(raw_data.iterrows(), total=raw_data.shape[0]):
         away_team = row['LTeamID']
         if season < 2018:
             labels.append(np.array([1.0, 0.0]))
+            labels.append(np.array([0.0, 1.0]))
         else:
             val_labels.append(np.array([1.0, 0.0]))
+            val_labels.append(np.array([0.0, 1.0]))
     else:
         season = row['Season']
         away_team = row['WTeamID']
         home_team = row['LTeamID']
         if season < 2018:
             labels.append(np.array([0.0, 1.0]))
+            labels.append(np.array([1.0, 0.0]))
         else:
             val_labels.append(np.array([0.0, 1.0]))
+            val_labels.append(np.array([1.0, 0.0]))
 
     if season < 2018:
         data.append(np.concatenate((team_data.loc[(home_team, season)].values,
             team_data.loc[(away_team, season)].values)))
+        data.append(np.concatenate((team_data.loc[(away_team, season)].values,
+            team_data.loc[(home_team, season)].values)))
     else:
         val_data.append(np.concatenate((team_data.loc[(home_team, season)].values,
             team_data.loc[(away_team, season)].values)))
-
+        val_data.append(np.concatenate((team_data.loc[(away_team, season)].values,
+            team_data.loc[(home_team, season)].values)))
 
 data = np.array(data)
 labels = np.array(labels)

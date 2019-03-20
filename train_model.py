@@ -17,6 +17,7 @@ import os
 import pickle
 from keras.models import Sequential
 from keras.layers import Dense, LeakyReLU, Activation
+from keras.callbacks import EarlyStopping
 import tensorflow as tf
 
 ### Import the game logs ###
@@ -40,16 +41,24 @@ model.add(LeakyReLU(alpha=0.1))
 model.add(Dense(2))
 model.add(Activation(tf.nn.softmax))
 
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy', 'mean_squared_error'])
-model.fit(train_data, train_labels, epochs=150, batch_size=10)
+callbacks = [EarlyStopping(monitor='val_loss', patience=3),
+             ModelCheckpoint(filepath=os.path.normpath("weights/best_model.h5"),
+                             monitor='val_loss',
+                             save_best_only=True)]
 
-scores = model.evaluate(val_data, val_labels)
-print(scores)
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy', 'mean_squared_error'])
+model.fit(train_features=train_data, 
+          train_target=train_labels,
+          epochs=150,
+          batch_size=10,
+          callbacks=callbacks,
+          verbose=0,
+          validation_data=(val_data,val_labels))
 
 model_yaml =  model.to_yaml()
-with open("models/20190319.yaml", "w") as yaml_file:
+with open("models/20190320.yaml", "w") as yaml_file:
     yaml_file.write(model_yaml)
 print("Saved model config to models/20190320.yaml")
-model.save_weights("weights/20190319.h5")
+model.save_weights("weights/20190320.h5")
 print("Saved model weights to weights/20190320.h5")
 

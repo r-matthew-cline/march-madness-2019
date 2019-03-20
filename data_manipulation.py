@@ -76,8 +76,8 @@ from tqdm import tqdm
 ##
 ##############################################################################
 
-teams = pd.read_csv(os.path.normpath("data/Teams.csv"))
-box_scores = pd.read_csv(os.path.normpath("data/RegularSeasonDetailedResults.csv"))
+teams = pd.read_csv(os.path.normpath("data/stage_2/Teams.csv"))
+box_scores = pd.read_csv(os.path.normpath("data/stage_2/RegularSeasonDetailedResults.csv"))
 
 
 
