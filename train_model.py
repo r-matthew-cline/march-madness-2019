@@ -41,7 +41,7 @@ model.add(LeakyReLU(alpha=0.1))
 model.add(Dense(2))
 model.add(Activation(tf.nn.softmax))
 
-callbacks = [EarlyStopping(monitor='val_loss', patience=3),
+callbacks = [EarlyStopping(monitor='val_acc', patience=10),
              ModelCheckpoint(filepath=os.path.normpath("weights/best_model.h5"),
                              monitor='val_loss',
                              save_best_only=True)]
