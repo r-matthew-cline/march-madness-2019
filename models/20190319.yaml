@@ -39,7 +39,7 @@ config:
     kernel_regularizer: null
     name: dense_2
     trainable: true
-    units: 64
+    units: 128
     use_bias: true
 - class_name: LeakyReLU
   config: {alpha: 0.10000000149011612, name: leaky_re_lu_2, trainable: true}
@@ -59,7 +59,7 @@ config:
     kernel_regularizer: null
     name: dense_3
     trainable: true
-    units: 8
+    units: 64
     use_bias: true
 - class_name: LeakyReLU
   config: {alpha: 0.10000000149011612, name: leaky_re_lu_3, trainable: true}
@@ -79,6 +79,48 @@ config:
     kernel_regularizer: null
     name: dense_4
     trainable: true
+    units: 32
+    use_bias: true
+- class_name: LeakyReLU
+  config: {alpha: 0.10000000149011612, name: leaky_re_lu_4, trainable: true}
+- class_name: Dense
+  config:
+    activation: linear
+    activity_regularizer: null
+    bias_constraint: null
+    bias_initializer:
+      class_name: Zeros
+      config: {}
+    bias_regularizer: null
+    kernel_constraint: null
+    kernel_initializer:
+      class_name: VarianceScaling
+      config: {distribution: uniform, mode: fan_avg, scale: 1.0, seed: null}
+    kernel_regularizer: null
+    name: dense_5
+    trainable: true
+    units: 8
+    use_bias: true
+- class_name: LeakyReLU
+  config: {alpha: 0.10000000149011612, name: leaky_re_lu_5, trainable: true}
+- class_name: Dense
+  config:
+    activation: linear
+    activity_regularizer: null
+    bias_constraint: null
+    bias_initializer:
+      class_name: Zeros
+      config: {}
+    bias_regularizer: null
+    kernel_constraint: null
+    kernel_initializer:
+      class_name: VarianceScaling
+      config: {distribution: uniform, mode: fan_avg, scale: 1.0, seed: null}
+    kernel_regularizer: null
+    name: dense_6
+    trainable: true
     units: 2
     use_bias: true
+- class_name: Activation
+  config: {activation: softmax, name: activation_1, trainable: true}
 keras_version: 2.2.0
