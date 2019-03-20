@@ -17,7 +17,7 @@ import os
 import pickle
 from keras.models import Sequential
 from keras.layers import Dense, LeakyReLU, Activation
-from keras.callbacks import EarlyStopping
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 import tensorflow as tf
 
 ### Import the game logs ###
