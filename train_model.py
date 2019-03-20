@@ -52,7 +52,6 @@ model.fit(train_data,
           epochs=150,
           batch_size=10,
           callbacks=callbacks,
-          verbose=0,
           validation_data=(val_data,val_labels))
 
 model_yaml =  model.to_yaml()
