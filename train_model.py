@@ -47,8 +47,8 @@ callbacks = [EarlyStopping(monitor='val_loss', patience=3),
                              save_best_only=True)]
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy', 'mean_squared_error'])
-model.fit(train_features=train_data, 
-          train_target=train_labels,
+model.fit(train_data,
+          train_labels,
           epochs=150,
           batch_size=10,
           callbacks=callbacks,
