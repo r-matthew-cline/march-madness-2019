@@ -17,6 +17,7 @@ from keras.layers import Dense, LeakyReLU, Activation
 import tensorflow as tf
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 
 ### Load the team mappings ###
@@ -40,27 +41,14 @@ model.compile(loss='categorical_crossentropy', optimizer='adam',
 
 ### Loop through all games ###
 for idx, row in tqdm(game_list.iterrows(), total=game_list.shape[0]):
-    matchup = row['ID'].split(separator='_')
-    print(matchup)
-    exit(1)
+    matchup = row['ID'].split("_")
+    team1 = int(matchup[1])
+    team2 = int(matchup[2])
 
-### Get team id ###
-team1 = 0
-team2 = 0
-try:
-    team1 = teams.loc[sys.argv[1], 'TeamID']
-except:
-    print("Unable to find Team1. Check spelling...")
-    exit(1)
-try:
-    team2 = teams.loc[sys.argv[2], 'TeamID']
-except:
-    print("Unable to find Team2. Check spelling...")
+    ### Create input vector ###
+    input_vector = np.array([np.concatenate((stats.loc[(team1, 2019)].values, stats.loc[(team2, 2019)].values))])
 
-### Create input vector ###
-input_vector = np.array([np.concatenate((stats.loc[(team1, 2019)].values, stats.loc[(team2, 2019)].values))])
+    pred = model.predict(input_vector)
+    game_list.loc[idx, 'Pred'] = pred[0][0]
 
-
-
-pred = model.predict(input_vector)
-print("Predictions: \n\t%s: %f\n\t%s: %f" % (sys.argv[1], pred[0][0], sys.argv[2], pred[0][1]))
+game_list.to_csv(os.path.normpath("custom_data/kaggle_output.csv"), index=None, header=True)
