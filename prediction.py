@@ -51,7 +51,7 @@ model_config = model_file.read()
 model_file.close()
 model = model_from_yaml(model_config)
 
-model.load_weights(os.path.normpath("weights/20190319.h5"))
+model.load_weights(os.path.normpath("weights/best_model.h5"))
 print("Model successfully loaded.\n\n")
 
 model.compile(loss='categorical_crossentropy', optimizer='adam',
