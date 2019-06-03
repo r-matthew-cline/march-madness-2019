@@ -20,31 +20,12 @@ import numpy as np
 import pandas as pd
 import sys
 
-if len(sys.argv) != 3:
-    print("You must enter two teams to predict the winner...")
-    exit(1)
+from flask import Flask
+from flask import jsonify
 
 ### Load the team mappings ###
-teams = pd.read_csv(os.path.normpath("data/stage_2/TeamSpellings.csv"), encoding='latin1')
-teams = teams.set_index('TeamNameSpelling')
 stats = pickle.load(open(os.path.normpath("custom_data/yearly_stats_normalized.p"), "rb"))
 
-### Get team id ###
-team1 = 0
-team2 = 0
-try:
-    team1 = teams.loc[sys.argv[1], 'TeamID']
-except:
-    print("Unable to find Team1. Check spelling...")
-    exit(1)
-try:
-    team2 = teams.loc[sys.argv[2], 'TeamID']
-except:
-    print("Unable to find Team2. Check spelling...")
-
-### Create input vector ###
-input_vector = np.array([np.concatenate((stats.loc[(team1, 2019)].values, stats.loc[(team2, 2019)].values))])
-print(input_vector.shape)
 
 ### Load the model architecture and weights ###
 model_file = open(os.path.normpath("models/20190319.yaml"), "r")
@@ -58,5 +39,24 @@ print("Model successfully loaded.\n\n")
 model.compile(loss='categorical_crossentropy', optimizer='adam',
               metrics=['accuracy', 'mean_squared_error'])
 
-pred = model.predict(input_vector)
-print("Predictions: \n\t%s: %f\n\t%s: %f" % (sys.argv[1], pred[0][0], sys.argv[2], pred[0][1]))
+model._make_predict_function()
+
+app = Flask(__name__)
+
+
+@app.route('/<int:team1>/<int:team2>')
+def prediction(team1, team2, method='GET'):
+
+    ### Create input vector ###
+    input_vector = np.array([np.concatenate((stats.loc[(team1, 2019)].values, stats.loc[(team2, 2019)].values))])
+    print(input_vector.shape)
+    ### Make Prediction ###
+    pred = model.predict(input_vector)
+    out = {}
+    out[str(team1)] = str(pred[0][0])
+    out[str(team2)] = str(pred[0][1])
+    print(out)
+    return jsonify(out)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5200)
