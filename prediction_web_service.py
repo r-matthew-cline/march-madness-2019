@@ -59,4 +59,4 @@ def prediction(team1, team2, method='GET'):
     return jsonify(out)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5200)
+    app.run(host='0.0.0.0', port=5000)
