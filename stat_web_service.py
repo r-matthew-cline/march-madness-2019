@@ -25,5 +25,5 @@ def get_stats(team_id):
     return jsonify(out)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5100)
+    app.run()
 
